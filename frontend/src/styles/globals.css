@@ -1,0 +1,818 @@
+/* === 1. Variable & Global Styles === */
+:root {
+  --primary-color: #4285f4;
+  --primary-hover: #3a7ae8; 
+  --secondary-color: #fbbc05;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+  --text-dark: #202124;
+  --text-medium: #5f6368;
+  --text-light: #70757a;
+  --border-color: #dadce0;
+  --bg-light: #f4f7f9;
+  --bg-white: #ffffff;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+  --min-touch-target: 48px;
+  --base-font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-light);
+  margin: 0;
+  padding: 15px;
+  color: var(--text-dark);
+  font-size: var(--base-font-size);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === 2. Header & Logo Styling (Mobile-First) === */
+.header {
+  background-color: var(--bg-white);
+  padding: 20px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  margin-bottom: 15px;
+  text-align: center;
+}
+.header-logo-image img {
+  max-width: 80px;
+  margin-bottom: 10px;
+}
+.header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--primary-color);
+}
+.header p {
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  margin-top: 5px;
+}
+
+/* === 3. Status/Message Styles === */
+.global-message {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.95rem;
+  background-color: #fff3cd; 
+  color: #856404; 
+  border: 1px solid #ffeeba;
+}
+.global-message.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ef9a9a;
+}
+.global-message.success {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #a5d6a7;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  width: 1.1em;
+  height: 1.1em;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === 4. Card/List (Applications) Styles === */
+.list-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.application-card {
+  background-color: var(--bg-white);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  border-left: 4px solid var(--primary-color);
+}
+.application-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px var(--shadow-medium);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 5px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.card-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-dark);
+  flex-grow: 1;
+  text-align: left;
+}
+.card-row-index {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 5px 10px;
+  min-height: 28px;
+  line-height: 18px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  align-self: center;
+}
+
+.card-body {
+  flex-grow: 1;
+}
+.card-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  padding: 8px 0;
+  border-bottom: 1px dashed #eee;
+  line-height: 1.4;
+  gap: 10px;
+}
+.card-detail-item:last-child {
+  border-bottom: none;
+}
+.detail-label {
+  font-weight: 600;
+  color: var(--text-medium);
+  flex-basis: 40%;
+  min-width: 40%;
+}
+.detail-value {
+  flex-basis: 60%;
+  text-align: right;
+  color: var(--text-dark);
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.status-badge {
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+/* Status Coloring */
+.status-badge.status-BELUM-DIGUBRIS { background-color: #ffedcc; color: #f97316; }
+.status-badge.status-DIPROSES { background-color: #e6f7ff; color: #108ee9; }
+.status-badge.status-SELESAI { background-color: #e6ffe6; color: #059669; }
+.status-badge.status-SIAP-DIAMBIL { background-color: #e6ffe6; color: #059669; }
+.status-badge.status-DITOLAK { background-color: #ffe6e6; color: #dc3545; }
+.status-badge.status-BATAL { background-color: #e9ecef; color: #6c757d; }
+
+/* === 5. Card Footer & Button Styles === */
+.card-footer {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+.btn-action {
+  padding: 12px 15px;
+  min-height: var(--min-touch-target);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+.btn-action:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-action:disabled {
+  background-color: #ccc !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.btn-primary-update {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* === 6. Modal Styling === */
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+  padding: 10px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--bg-white);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px var(--shadow-medium);
+  max-width: 95%;
+  width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.modal-content h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.modal-form-group {
+  margin-bottom: 20px;
+}
+.modal-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-medium);
+  font-size: 0.95rem;
+}
+.modal-form-group input, 
+.modal-form-group select, 
+.modal-form-group textarea {
+  width: 100%;
+  padding: 15px;
+  min-height: var(--min-touch-target);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.modal-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-modal-update {
+  padding: 15px 20px;
+  min-height: var(--min-touch-target);
+  font-size: 1.1rem;
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.btn-modal-update:disabled {
+  background-color: #ccc !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.close-button {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-light);
+  cursor: pointer;
+  line-height: 1;
+  margin-top: -5px;
+}
+.close-button:hover,
+.close-button:focus {
+  color: var(--text-dark);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* === 7. Responsive Design === */
+@media (min-width: 768px) {
+  body {
+    padding: 20px;
+  }
+  .header {
+    padding: 25px 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+  }
+  .header-logo-image img {
+    max-width: 100px; 
+  }
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .list-container {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  
+  .application-card {
+    padding: 20px;
+    border-radius: 10px;
+    border-left-width: 5px;
+  }
+  
+  .card-header {
+    flex-wrap: nowrap;
+  }
+  .card-name {
+    font-size: 1.1rem;
+  }
+  
+  .card-detail-item {
+    font-size: 0.9rem;
+  }
+  .detail-label {
+    flex-basis: 50%;
+    min-width: 50%;
+  }
+  .detail-value {
+    flex-basis: 50%;
+  }
+
+  .card-footer {
+    text-align: right;
+  }
+  .btn-action {
+    width: auto;
+  }
+  .modal-content {
+    margin: 5% auto; 
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .header {
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 1.3rem;
+  }
+  .application-card {
+    padding: 12px;
+    border-left-width: 3px;
+    margin-bottom: 10px;
+  }
+  
+  .card-detail-item {
+    flex-direction: column; 
+    align-items: flex-start;
+    padding: 6px 0;
+  }
+  .detail-label {
+    flex-basis: 100%;
+    text-align: left;
+    margin-bottom: 2px;
+    font-size: 0.85rem;
+  }
+  .detail-value {
+    flex-basis: 100%;
+    text-align: left;
+    word-break: break-all;
+  }
+  .card-footer {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .btn-action {
+    font-size: 0.95rem;
+    padding: 14px 15px;
+  }
+  .modal-content {
+    width: 95%;
+    margin: 5% auto;
+  }
+}
+/* Tambahkan ini di bagian bawah file globals.css yang sudah ada */
+
+/* === USER STYLES === */
+
+/* Container untuk Mobile (Full Screen) */
+.user-container {
+  background-color: var(--bg-white);
+  padding: 25px 20px;
+  border-radius: 0;
+  box-shadow: none;
+  max-width: 100%;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+
+/* Logo/Header Styling */
+.header-logo-image {
+  margin-bottom: 25px;
+}
+.header-logo-image img {
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.address {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+
+/* Button Styling */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.main-button {
+  padding: 20px 25px;
+  min-height: var(--min-touch-target);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.main-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--shadow-light);
+}
+.main-button svg {
+  width: 1.25em;
+  height: 1.25em;
+  stroke-width: 2.3;
+}
+
+/* Green button for "Ajukan Permohonan" */
+.btn-submit {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+.btn-submit:hover {
+  background-color: #218838;
+}
+
+/* Blue button for "Cek Status" */
+.btn-check-status {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+.btn-check-status:hover {
+  background-color: #0069d9;
+}
+
+/* Status Check Section */
+#status-check {
+  text-align: left;
+}
+
+.back-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+.back-link svg {
+  width: 1em;
+  height: 1em;
+  stroke-width: 2.5;
+}
+
+#status-check h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+#status-check h2 {
+  font-size: 1rem;
+  color: var(--text-medium);
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+/* Form Input Styling */
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 16px;
+  min-height: var(--min-touch-target);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
+}
+
+.form-group input[type="text"]::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.search-button {
+  background-color: #fbbc05;
+  color: white;
+  padding: 16px 20px;
+  min-height: var(--min-touch-target);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(251, 188, 5, 0.3);
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border-radius: 0 0 10px 10px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+  background-color: #f6b100;
+  box-shadow: 0 6px 18px rgba(251, 188, 5, 0.4);
+}
+
+.search-button:disabled {
+  background-color: #cccccc !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Status Messages */
+#status-message {
+  margin-top: 25px;
+  padding: 18px;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+#status-message.loading {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #90caf9;
+}
+
+#status-message.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ef9a9a;
+}
+
+#status-message.success {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #a5d6a7;
+}
+
+/* Status Card Styling */
+.status-card {
+  margin-top: 30px;
+}
+
+.permohonan-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: var(--bg-white);
+  box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.permohonan-item:last-child {
+  margin-bottom: 0;
+}
+
+.permohonan-header {
+  font-weight: 700;
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.05em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.status-summary {
+  text-align: center;
+  padding: 15px;
+  margin-bottom: 25px;
+  background-color: #e8f0fe;
+  border-radius: 10px;
+  color: #007bff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid #c5daff;
+}
+
+/* Status Item Layout */
+.status-item {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e0e0e0;
+  align-items: flex-start;
+  font-size: 1rem;
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-label {
+  font-weight: 600;
+  color: var(--text-dark);
+  flex-basis: auto;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.status-value {
+  flex-basis: auto;
+  text-align: left;
+  word-wrap: break-word;
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Status Coloring */
+.status-value.status-pending {
+  color: #f97316;
+  font-weight: 700;
+}
+
+.status-value.status-Selesai {
+  color: #059669;
+  font-weight: 700;
+}
+
+.status-value.status-Ditolak {
+  color: #e53e3e;
+  font-weight: 700;
+}
+
+/* Responsive Design untuk User */
+@media (min-width: 768px) {
+  .user-container {
+    padding: 45px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px var(--shadow-medium);
+    max-width: 550px;
+    min-height: auto;
+    margin: 20px auto;
+  }
+
+  .header-logo-image img {
+    max-width: 150px;
+  }
+
+  .status-item {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .status-label {
+    flex-basis: 45%;
+    text-align: left;
+    margin-bottom: 0;
+    color: var(--text-medium);
+    font-size: 0.95rem;
+  }
+
+  .status-value {
+    flex-basis: 55%;
+    text-align: right;
+    font-size: 0.95rem;
+  }
+
+  .search-button {
+    position: static;
+    padding: 16px 20px;
+    margin-top: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(251, 188, 5, 0.3);
+  }
+
+  .permohonan-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-medium);
+  }
+}
+
+@media (max-width: 360px) {
+  .user-container {
+    padding: 20px 15px;
+  }
+
+  .header-logo-image img {
+    max-width: 100px;
+  }
+
+  .main-button {
+    font-size: 1rem;
+    padding: 16px 20px;
+  }
+
+  .address {
+    font-size: 0.9rem;
+  }
+}

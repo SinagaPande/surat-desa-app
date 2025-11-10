@@ -1,0 +1,102 @@
+import React, { useState, useEffect } from 'react';
+import { apiService } from '../services/api';
+import ApplicationCard from './ApplicationCard';
+import EditModal from './EditModal';
+
+const AdminDashboard = () => {
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    loadApplications();
+  }, []);
+
+  const loadApplications = async () => {
+    try {
+      setLoading(true);
+      setMessage('');
+      const data = await apiService.getAllApplications();
+      setApplications(data);
+    } catch (error) {
+      setMessage(`Error: Gagal memuat data. Periksa koneksi server. Detail: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditApplication = (application) => {
+    setSelectedApplication(application);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateApplication = async (rowNumber, formData) => {
+    await apiService.updateApplication(
+      rowNumber,
+      formData.status,
+      formData.kehadiran,
+      formData.catatan
+    );
+    // Reload data setelah update
+    await loadApplications();
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedApplication(null);
+  };
+
+  return (
+    <div className="container">
+      <div className="header">
+        <div className="header-logo-image">
+          <img 
+            src="https://i.postimg.cc/5yhhKnTN/Logo-Lampung-Selatan-Baru-removebg-preview.png" 
+            alt="Logo Desa" 
+          />
+        </div>
+        <h1>Dashboard Administrasi Surat</h1>
+        <p>Kelola dan perbarui status permohonan surat masuk.</p>
+      </div>
+
+      {message && (
+        <div className={`global-message ${message.includes('Error') ? 'error' : 'success'}`}>
+          {message}
+        </div>
+      )}
+
+      <div className="list-container">
+        {loading ? (
+          <div style={{ textAlign: 'center', color: 'var(--text-medium)' }}>
+            <span className="loading-spinner"></span> Memuat data...
+          </div>
+        ) : applications.length === 0 ? (
+          <div className="global-message">
+            Belum ada data permohonan yang masuk.
+          </div>
+        ) : (
+          applications
+            .sort((a, b) => b.rowNumber - a.rowNumber)
+            .map((application) => (
+              <ApplicationCard
+                key={application.rowNumber}
+                application={application}
+                onEdit={handleEditApplication}
+              />
+            ))
+        )}
+      </div>
+
+      <EditModal
+        application={selectedApplication}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onUpdate={handleUpdateApplication}
+      />
+    </div>
+  );
+};
+
+export default AdminDashboard;
