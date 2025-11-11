@@ -2,6 +2,7 @@
   "name": "surat-desa-app",
   "version": "1.0.0",
   "scripts": {
-    "vercel-build": "cd frontend && npm install && npm run build"
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && node server.js"
   }
 }
