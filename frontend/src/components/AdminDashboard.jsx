@@ -18,7 +18,7 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       setMessage('');
-      const data = await apiService.getAllApplications();
+      const data = await apiService.getAllData();
       setApplications(data);
     } catch (error) {
       setMessage(`Error: Gagal memuat data. Periksa koneksi server. Detail: ${error.message}`);
@@ -33,12 +33,7 @@ const AdminDashboard = () => {
   };
 
   const handleUpdateApplication = async (rowNumber, formData) => {
-    await apiService.updateApplication(
-      rowNumber,
-      formData.status,
-      formData.kehadiran,
-      formData.catatan
-    );
+    await apiService.updateApplication(rowNumber, formData);
     // Reload data setelah update
     await loadApplications();
   };

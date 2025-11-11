@@ -1,27 +1,47 @@
-// ✅ KONFIGURASI YANG BENAR:
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api'  // ← GUNAKAN RELATIVE PATH di production
+  ? '/api'
   : 'http://localhost:3001/api';
 
 export const apiService = {
   async checkStatus(nik) {
-    const response = await fetch(`${API_BASE_URL}/check/${nik}`);
-    return await response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/check/${nik}`);
+      if (!response.ok) throw new Error('Network response was not ok');
+      return await response.json();
+    } catch (error) {
+      console.error('Error checking status:', error);
+      throw error;
+    }
   },
   
   async getAllData() {
-    const response = await fetch(`${API_BASE_URL}/all`);
-    return await response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/all`);
+      if (!response.ok) throw new Error('Network response was not ok');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching all data:', error);
+      throw error;
+    }
   },
   
   async updateApplication(rowNumber, data) {
-    const response = await fetch(`${API_BASE_URL}/update/${rowNumber}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/update/${rowNumber}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating application:', error);
+      throw error;
+    }
   }
 };
+
+// Export default untuk compatibility
+export default apiService;
