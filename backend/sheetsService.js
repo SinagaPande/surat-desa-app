@@ -4,7 +4,7 @@ class SheetsService {
   constructor() {
     this.auth = null;
     this.sheets = null;
-    this.spreadsheetId = null;
+    this.spreadsheetId = process.env.GOOGLE_SHEETS_ID;
     this.sheetName = 'Form Responses 1';
     
     this.init();
@@ -12,16 +12,24 @@ class SheetsService {
 
   async init() {
     try {
-      // Authenticate dengan Service Account
+      // Authenticate dengan Service Account dari Environment Variables
       this.auth = new google.auth.GoogleAuth({
-        keyFile: './credentials.json',
+        credentials: {
+          type: 'service_account',
+          project_id: process.env.GOOGLE_PROJECT_ID,
+          private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+          client_email: process.env.GOOGLE_CLIENT_EMAIL,
+          client_id: process.env.GOOGLE_CLIENT_ID,
+          auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+          token_uri: 'https://oauth2.googleapis.com/token',
+          auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+          client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL
+        },
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
       });
 
       this.sheets = google.sheets({ version: 'v4', auth: this.auth });
-      
-      // GANTI DENGAN SPREADSHEET ID ANDA
-      this.spreadsheetId = '109UUvGWQgD-uFfvOjbMipJWPs3eRv-zHTU_PGsv8Vu8';
       
       console.log('Google Sheets API berhasil diinisialisasi');
     } catch (error) {
