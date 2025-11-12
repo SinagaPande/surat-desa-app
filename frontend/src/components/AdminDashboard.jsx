@@ -84,6 +84,31 @@ const AdminDashboard = () => {
 
   return (
     <div className="container">
+      {/* TAMBAHKAN NAVIGASI KE USER DASHBOARD */}
+      <div style={{ marginBottom: '20px' }}>
+        <a 
+          href="/" 
+          style={{ 
+            color: 'var(--primary)', 
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '0.9em',
+            fontWeight: '500',
+            padding: '8px 16px',
+            border: '1px solid var(--primary)',
+            borderRadius: '5px',
+            background: 'white'
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Kembali ke Halaman Warga
+        </a>
+      </div>
+
       <div className="header">
         <div className="header-logo-image">
           <img 

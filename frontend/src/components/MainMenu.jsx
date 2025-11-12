@@ -44,6 +44,30 @@ const MainMenu = ({ onCheckStatus }) => {
           Cek Status Permohonan
         </button>
       </div>
+
+      {/* TAMBAHKAN LINK KE ADMIN DI BAWAH */}
+      <div style={{ 
+        marginTop: '25px', 
+        padding: '15px', 
+        background: '#f8f9fa', 
+        borderRadius: '8px',
+        border: '1px solid #e9ecef',
+        textAlign: 'center'
+      }}>
+        <small style={{ color: '#6c757d' }}>
+          Akses Administrator? {' '}
+          <a 
+            href="/admin" 
+            style={{ 
+              color: 'var(--primary)', 
+              textDecoration: 'none',
+              fontWeight: '500'
+            }}
+          >
+            Login ke Dashboard Admin
+          </a>
+        </small>
+      </div>
     </div>
   );
 };
