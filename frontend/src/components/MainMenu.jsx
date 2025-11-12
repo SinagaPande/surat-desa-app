@@ -3,6 +3,7 @@ import React from 'react';
 const MainMenu = ({ onCheckStatus }) => {
   return (
     <div id="main-menu">
+      {/* Logo dengan container khusus */}
       <div className="header-logo-image">
         <img 
           src="https://i.postimg.cc/5yhhKnTN/Logo-Lampung-Selatan-Baru-removebg-preview.png" 
@@ -10,6 +11,7 @@ const MainMenu = ({ onCheckStatus }) => {
         />
       </div>
       
+      {/* Alamat */}
       <p className="address">
         <strong>Balai Desa Gedung Harapan</strong><br />
         Kecamatan Jati Agung,<br />
@@ -17,6 +19,7 @@ const MainMenu = ({ onCheckStatus }) => {
         Provinsi Lampung
       </p>
 
+      {/* Tombol utama */}
       <div className="button-group">
         <a 
           href="https://forms.gle/6arPmZQX2wWWYLC27" 
@@ -45,25 +48,11 @@ const MainMenu = ({ onCheckStatus }) => {
         </button>
       </div>
 
-      {/* TAMBAHKAN LINK KE ADMIN DI BAWAH */}
-      <div style={{ 
-        marginTop: '25px', 
-        padding: '15px', 
-        background: '#f8f9fa', 
-        borderRadius: '8px',
-        border: '1px solid #e9ecef',
-        textAlign: 'center'
-      }}>
-        <small style={{ color: '#6c757d' }}>
+      {/* Link admin dengan class khusus */}
+      <div className="admin-link-container">
+        <small>
           Akses Administrator? {' '}
-          <a 
-            href="/admin" 
-            style={{ 
-              color: 'var(--primary)', 
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}
-          >
+          <a href="/admin">
             Login ke Dashboard Admin
           </a>
         </small>

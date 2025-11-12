@@ -816,3 +816,109 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* === PERBAIKAN LOGO & LAYOUT USER === */
+
+/* Container utama user */
+#main-menu {
+  background-color: var(--bg-white);
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px var(--shadow-medium);
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Logo positioning yang tepat di tengah */
+.header-logo-image {
+  margin: 0 auto 25px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.header-logo-image img {
+  max-width: 140px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Alamat styling */
+.address {
+  color: var(--text-medium);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 35px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 30px;
+  width: 100%;
+}
+
+/* Link admin styling */
+.admin-link-container {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  text-align: center;
+  width: 100%;
+}
+
+.admin-link-container small {
+  color: #6c757d;
+}
+
+.admin-link-container a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-link-container a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design untuk logo */
+@media (min-width: 768px) {
+  #main-menu {
+    padding: 40px 35px;
+    max-width: 500px;
+  }
+  
+  .header-logo-image img {
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  #main-menu {
+    padding: 25px 20px;
+    margin: 10px auto;
+    border-radius: 12px;
+  }
+  
+  .header-logo-image img {
+    max-width: 120px;
+  }
+  
+  .address {
+    font-size: 0.95rem;
+  }
+}
