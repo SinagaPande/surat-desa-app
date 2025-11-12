@@ -1,6 +1,7 @@
-// frontend/src/pages/User/UserDashboard.jsx
+// frontend/src/components/UserDashboard.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
+// ✅ PERBAIKI IMPORT - semua dari folder components yang sama
 import MainMenu from './MainMenu';
 import StatusCheck from './StatusCheck';
 import StatusCard from './StatusCard';

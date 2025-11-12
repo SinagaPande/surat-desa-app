@@ -1,6 +1,7 @@
-// frontend/src/pages/Admin/AdminDashboard.jsx
+// frontend/src/components/AdminDashboard.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
+// ✅ PERBAIKI IMPORT - semua dari folder components yang sama
 import ApplicationCard from './ApplicationCard';
 import EditModal from './EditModal';
 

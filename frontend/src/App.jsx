@@ -1,14 +1,16 @@
+// frontend/src/App.jsx
 import React, { useState } from 'react';
+// ✅ PERBAIKI IMPORT - dari folder components
 import AdminDashboard from './components/AdminDashboard';
 import UserDashboard from './components/UserDashboard';
 import './styles/globals.css';
 
 function App() {
-  const [currentMode, setCurrentMode] = useState('user'); // 'user' atau 'admin'
+  const [currentMode, setCurrentMode] = useState('user');
 
   return (
     <div className="App">
-      {/* Simple Mode Switcher - bisa dihapus setelah development */}
+      {/* Mode Switcher */}
       <div style={{
         position: 'fixed',
         top: '10px',
