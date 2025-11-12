@@ -5,6 +5,10 @@
   --secondary-color: #fbbc05;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --info-color: #007bff; /* Baru: Warna info untuk tombol cek status/loading */
+  --info-hover: #0069d9;
+  --warning-bg: #fff3cd; /* Digunakan untuk global-message default */
+  --warning-text: #856404;
   --text-dark: #202124;
   --text-medium: #5f6368;
   --text-light: #70757a;
@@ -15,6 +19,9 @@
   --shadow-medium: rgba(0, 0, 0, 0.12);
   --min-touch-target: 48px;
   --base-font-size: 16px;
+  --border-radius-base: 8px; /* Baru: Untuk elemen kecil/card admin */
+  --border-radius-large: 10px; /* Baru: Untuk input/tombol user */
+  --border-radius-xl: 12px; /* Baru: Untuk tombol utama user */
 }
 
 * {
@@ -43,11 +50,94 @@ body {
   box-sizing: border-box;
 }
 
+/* --- GLOBAL MIXINS FOR BUTTONS & INPUTS --- */
+
+/* Base style untuk semua tombol interaktif (admin/user) */
+.base-button-style {
+  min-height: var(--min-touch-target);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  /* Properti tambahan untuk tombol user */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.base-button-style:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.base-button-style:disabled {
+  background-color: #ccc !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Base style untuk semua Input/Textarea/Select (admin/user) */
+.base-form-input {
+  display: block;
+  padding: 15px;
+  width: 100%;
+  min-height: var(--min-touch-target);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-large);
+  box-sizing: border-box;
+  font-size: 1rem;
+  color: var(--text-dark);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.base-form-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25);
+  outline: none;
+}
+
+/* Base style untuk pesan status/notifikasi */
+.status-message-base {
+  padding: 15px;
+  border-radius: var(--border-radius-base);
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+/* GLOBAL STATUS COLORING MIXIN (Pesan/Badge) */
+.status-color-warning { 
+    background-color: var(--warning-bg); 
+    color: var(--warning-text); 
+    border: 1px solid #ffeeba;
+}
+.status-color-error {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ef9a9a;
+}
+.status-color-success {
+    background-color: #e8f5e9;
+    color: #388e3c;
+    border: 1px solid #a5d6a7;
+}
+.status-color-info {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #90caf9;
+}
+
 /* === 2. Header & Logo Styling (Mobile-First) === */
 .header {
   background-color: var(--bg-white);
   padding: 20px 15px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-base);
   box-shadow: 0 4px 12px var(--shadow-light);
   margin-bottom: 15px;
   text-align: center;
@@ -67,27 +157,18 @@ body {
   margin-top: 5px;
 }
 
-/* === 3. Status/Message Styles === */
+/* === 3. Status/Message Styles (Admin) === */
 .global-message {
-  margin-bottom: 15px;
-  padding: 15px;
-  border-radius: 8px;
-  font-weight: 500;
-  text-align: center;
-  font-size: 0.95rem;
-  background-color: #fff3cd; 
-  color: #856404; 
-  border: 1px solid #ffeeba;
+  @extend .status-message-base;
+}
+.global-message, .global-message.default {
+  @extend .status-color-warning; /* Default */
 }
 .global-message.error {
-  background-color: #ffebee;
-  color: #d32f2f;
-  border: 1px solid #ef9a9a;
+  @extend .status-color-error;
 }
 .global-message.success {
-  background-color: #e8f5e9;
-  color: #388e3c;
-  border: 1px solid #a5d6a7;
+  @extend .status-color-success;
 }
 
 .loading-spinner {
@@ -116,7 +197,7 @@ body {
 .application-card {
   background-color: var(--bg-white);
   padding: 15px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-base);
   box-shadow: 0 4px 12px var(--shadow-light);
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
@@ -196,6 +277,7 @@ body {
 }
 
 /* Status Coloring */
+/* Menggunakan nama status untuk styling spesifik */
 .status-badge.status-BELUM-DIGUBRIS { background-color: #ffedcc; color: #f97316; }
 .status-badge.status-DIPROSES { background-color: #e6f7ff; color: #108ee9; }
 .status-badge.status-SELESAI { background-color: #e6ffe6; color: #059669; }
@@ -203,7 +285,7 @@ body {
 .status-badge.status-DITOLAK { background-color: #ffe6e6; color: #dc3545; }
 .status-badge.status-BATAL { background-color: #e9ecef; color: #6c757d; }
 
-/* === 5. Card Footer & Button Styles === */
+/* === 5. Card Footer & Button Styles (Admin) === */
 .card-footer {
   margin-top: 15px;
   padding-top: 10px;
@@ -211,31 +293,19 @@ body {
   text-align: center;
 }
 .btn-action {
+  @extend .base-button-style; /* Menggunakan base style untuk transisi, disabled, min-height */
   padding: 12px 15px;
-  min-height: var(--min-touch-target);
   font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
+  border-radius: var(--border-radius-base);
+  /* width: 100%; sudah ada di base-button-style */
 }
-.btn-action:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-.btn-action:disabled {
-  background-color: #ccc !important;
-  opacity: 0.7;
-  cursor: not-allowed;
-}
+
 .btn-primary-update {
   background-color: var(--primary-color);
   color: white;
 }
 
-/* === 6. Modal Styling === */
+/* === 6. Modal Styling (Admin) === */
 .modal {
   display: flex;
   position: fixed;
@@ -255,7 +325,7 @@ body {
 .modal-content {
   background-color: var(--bg-white);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--border-radius-xl);
   box-shadow: 0 8px 30px var(--shadow-medium);
   max-width: 95%;
   width: 500px;
@@ -279,17 +349,14 @@ body {
   color: var(--text-medium);
   font-size: 0.95rem;
 }
+
+/* Menggunakan base-form-input untuk input modal */
 .modal-form-group input, 
 .modal-form-group select, 
 .modal-form-group textarea {
-  width: 100%;
+  @extend .base-form-input; 
   padding: 15px;
-  min-height: var(--min-touch-target);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+  border-radius: var(--border-radius-base); /* Menggunakan radius kecil untuk modal */
 }
 .modal-form-group textarea {
   resize: vertical;
@@ -297,21 +364,13 @@ body {
 }
 
 .btn-modal-update {
+  @extend .base-button-style; /* Menggunakan base style untuk transisi, disabled, min-height */
   padding: 15px 20px;
-  min-height: var(--min-touch-target);
   font-size: 1.1rem;
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--border-radius-base);
   background-color: var(--primary-color);
   color: white;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.3s;
-}
-.btn-modal-update:disabled {
-  background-color: #ccc !important;
-  opacity: 0.7;
-  cursor: not-allowed;
 }
 
 .close-button {
@@ -330,14 +389,14 @@ body {
   cursor: pointer;
 }
 
-/* === 7. Responsive Design === */
+/* === 7. Responsive Design (Admin) === */
 @media (min-width: 768px) {
   body {
     padding: 20px;
   }
   .header {
     padding: 25px 30px;
-    border-radius: 12px;
+    border-radius: var(--border-radius-xl);
     margin-bottom: 25px;
   }
   .header-logo-image img {
@@ -354,7 +413,7 @@ body {
   
   .application-card {
     padding: 20px;
-    border-radius: 10px;
+    border-radius: var(--border-radius-large);
     border-left-width: 5px;
   }
   
@@ -435,9 +494,21 @@ body {
     margin: 5% auto;
   }
 }
-/* Tambahkan ini di bagian bawah file globals.css yang sudah ada */
 
 /* === USER STYLES === */
+
+/* Container utama user */
+#main-menu {
+  background-color: var(--bg-white);
+  padding: 30px 25px;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 12px 30px var(--shadow-medium);
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 /* Container untuk Mobile (Full Screen) */
 .user-container {
@@ -453,52 +524,56 @@ body {
   min-height: 100vh;
 }
 
-/* Logo/Header Styling */
+/* Logo positioning yang tepat di tengah */
 .header-logo-image {
-  margin-bottom: 25px;
+  margin: 0 auto 25px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 .header-logo-image img {
-  max-width: 120px;
+  max-width: 140px;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--border-radius-xl);
   object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .address {
-  color: var(--text-light);
+  color: var(--text-medium);
   font-size: 1rem;
   font-weight: 400;
   margin-bottom: 35px;
   line-height: 1.6;
+  text-align: center;
 }
 
-/* Button Styling */
+/* Button Styling (User) */
 .button-group {
   display: flex;
   flex-direction: column;
   gap: 18px;
   margin-top: 30px;
+  width: 100%;
 }
 
 .main-button {
+  @extend .base-button-style; /* Menggunakan base style */
   padding: 20px 25px;
-  min-height: var(--min-touch-target);
   font-size: 1.1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: var(--border-radius-xl);
   gap: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
-.main-button:hover {
+.main-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px var(--shadow-light);
+  opacity: 1;
 }
+
 .main-button svg {
   width: 1.25em;
   height: 1.25em;
@@ -507,7 +582,7 @@ body {
 
 /* Green button for "Ajukan Permohonan" */
 .btn-submit {
-  background-color: #28a745;
+  background-color: var(--success-color);
   color: white;
   box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
@@ -517,12 +592,12 @@ body {
 
 /* Blue button for "Cek Status" */
 .btn-check-status {
-  background-color: #007bff;
+  background-color: var(--info-color);
   color: white;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 .btn-check-status:hover {
-  background-color: #0069d9;
+  background-color: var(--info-hover);
 }
 
 /* Status Check Section */
@@ -562,7 +637,7 @@ body {
   margin-bottom: 30px;
 }
 
-/* Form Input Styling */
+/* Form Input Styling (User) */
 .form-group {
   margin-bottom: 25px;
 }
@@ -576,15 +651,9 @@ body {
 }
 
 .form-group input[type="text"] {
-  width: 100%;
+  @extend .base-form-input; /* Menggunakan base form input */
   padding: 16px;
-  min-height: var(--min-touch-target);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  box-sizing: border-box;
   font-size: 1.1rem;
-  transition: all 0.3s ease;
-  color: var(--text-dark);
 }
 
 .form-group input[type="text"]::placeholder {
@@ -592,75 +661,47 @@ body {
   opacity: 0.7;
 }
 
-.form-group input[type="text"]:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-  outline: none;
-}
-
 .search-button {
-  background-color: #fbbc05;
+  @extend .base-button-style; /* Menggunakan base button style */
+  background-color: var(--secondary-color);
   color: white;
-  padding: 16px 20px;
-  min-height: var(--min-touch-target);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  padding: 20px;
   font-size: 1rem;
-  font-weight: 600;
-  transition: background-color 0.3s, box-shadow 0.3s, opacity 0.3s;
-  width: 100%;
-  box-shadow: 0 4px 15px rgba(251, 188, 5, 0.3);
+  border-radius: 0 0 10px 10px; /* Radius spesifik untuk sticky */
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  
+  /* Styling spesifik sticky */
   position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 10;
-  border-radius: 0 0 10px 10px;
-  padding: 20px;
-  margin-top: 30px;
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.search-button:hover {
+.search-button:hover:not(:disabled) {
   background-color: #f6b100;
-  box-shadow: 0 6px 18px rgba(251, 188, 5, 0.4);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1), 0 6px 18px rgba(251, 188, 5, 0.4);
+  transform: none; /* Override transform di base-button-style untuk sticky button */
 }
 
-.search-button:disabled {
-  background-color: #cccccc !important;
-  opacity: 0.7;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Status Messages */
+/* Status Messages (User) */
 #status-message {
+  @extend .status-message-base;
   margin-top: 25px;
-  padding: 18px;
-  border-radius: 10px;
-  font-weight: 500;
-  text-align: center;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  margin-bottom: 0; /* Override margin-bottom default base */
 }
 
 #status-message.loading {
-  background-color: #e3f2fd;
-  color: #1976d2;
-  border: 1px solid #90caf9;
+  @extend .status-color-info; /* Menggunakan info color */
 }
 
 #status-message.error {
-  background-color: #ffebee;
-  color: #d32f2f;
-  border: 1px solid #ef9a9a;
+  @extend .status-color-error;
 }
 
 #status-message.success {
-  background-color: #e8f5e9;
-  color: #388e3c;
-  border: 1px solid #a5d6a7;
+  @extend .status-color-success;
 }
 
 /* Status Card Styling */
@@ -671,7 +712,7 @@ body {
 .permohonan-item {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid #e0e0e0;
-  border-radius: 12px;
+  border-radius: var(--border-radius-xl);
   padding: 20px;
   margin-bottom: 20px;
   background: var(--bg-white);
@@ -696,7 +737,7 @@ body {
   padding: 15px;
   margin-bottom: 25px;
   background-color: #e8f0fe;
-  border-radius: 10px;
+  border-radius: var(--border-radius-large);
   color: #007bff;
   font-weight: 600;
   font-size: 1rem;
@@ -750,19 +791,50 @@ body {
   font-weight: 700;
 }
 
+/* Link admin styling */
+.admin-link-container {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: var(--border-radius-base);
+  border: 1px solid #e9ecef;
+  text-align: center;
+  width: 100%;
+}
+
+.admin-link-container small {
+  color: #6c757d;
+}
+
+.admin-link-container a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-link-container a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive Design untuk User */
 @media (min-width: 768px) {
   .user-container {
     padding: 45px;
-    border-radius: 16px;
+    border-radius: var(--border-radius-xl);
     box-shadow: 0 12px 30px var(--shadow-medium);
     max-width: 550px;
     min-height: auto;
     margin: 20px auto;
   }
 
+  /* Perbaikan layout main-menu */
+  #main-menu {
+    padding: 40px 35px;
+    max-width: 500px;
+  }
+  
   .header-logo-image img {
-    max-width: 150px;
+    max-width: 160px;
   }
 
   .status-item {
@@ -788,13 +860,29 @@ body {
     position: static;
     padding: 16px 20px;
     margin-top: 0;
-    border-radius: 10px;
+    border-radius: var(--border-radius-large);
     box-shadow: 0 4px 15px rgba(251, 188, 5, 0.3);
   }
 
   .permohonan-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px var(--shadow-medium);
+  }
+}
+
+@media (max-width: 480px) {
+  #main-menu {
+    padding: 25px 20px;
+    margin: 10px auto;
+    border-radius: var(--border-radius-xl);
+  }
+  
+  .header-logo-image img {
+    max-width: 120px;
+  }
+  
+  .address {
+    font-size: 0.95rem;
   }
 }
 
@@ -814,111 +902,5 @@ body {
 
   .address {
     font-size: 0.9rem;
-  }
-}
-
-/* === PERBAIKAN LOGO & LAYOUT USER === */
-
-/* Container utama user */
-#main-menu {
-  background-color: var(--bg-white);
-  padding: 30px 25px;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px var(--shadow-medium);
-  max-width: 500px;
-  margin: 20px auto;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Logo positioning yang tepat di tengah */
-.header-logo-image {
-  margin: 0 auto 25px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.header-logo-image img {
-  max-width: 140px;
-  height: auto;
-  border-radius: 12px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Alamat styling */
-.address {
-  color: var(--text-medium);
-  font-size: 1rem;
-  font-weight: 400;
-  margin-bottom: 35px;
-  line-height: 1.6;
-  text-align: center;
-}
-
-/* Button group styling */
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-top: 30px;
-  width: 100%;
-}
-
-/* Link admin styling */
-.admin-link-container {
-  margin-top: 25px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-  text-align: center;
-  width: 100%;
-}
-
-.admin-link-container small {
-  color: #6c757d;
-}
-
-.admin-link-container a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.admin-link-container a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive design untuk logo */
-@media (min-width: 768px) {
-  #main-menu {
-    padding: 40px 35px;
-    max-width: 500px;
-  }
-  
-  .header-logo-image img {
-    max-width: 160px;
-  }
-}
-
-@media (max-width: 480px) {
-  #main-menu {
-    padding: 25px 20px;
-    margin: 10px auto;
-    border-radius: 12px;
-  }
-  
-  .header-logo-image img {
-    max-width: 120px;
-  }
-  
-  .address {
-    font-size: 0.95rem;
   }
 }
