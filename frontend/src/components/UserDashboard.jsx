@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// frontend/src/pages/User/UserDashboard.jsx
+import React, { useState, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
 import MainMenu from './MainMenu';
 import StatusCheck from './StatusCheck';
@@ -9,17 +10,60 @@ const UserDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentNik, setCurrentNik] = useState('');
+  const pollingRef = useRef(null);
+
+  // NEW: Cleanup polling saat component unmount
+  useEffect(() => {
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+      }
+    };
+  }, []);
+
+  // NEW: Real-time polling untuk data user
+  const startPolling = (nik) => {
+    // Stop existing polling
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+    }
+
+    // Start new polling setiap 10 detik
+    pollingRef.current = setInterval(async () => {
+      try {
+        const result = await apiService.checkLetterStatus(nik);
+        if (result && !result.error) {
+          setApplications(Array.isArray(result) ? result : [result]);
+        }
+      } catch (error) {
+        console.log('Polling error:', error.message);
+        // Silent error untuk polling
+      }
+    }, 10000); // 10 detik
+  };
+
+  const stopPolling = () => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+  };
 
   const handleCheckStatus = () => {
     setCurrentView('status-check');
     setMessage('');
     setApplications([]);
+    setCurrentNik('');
+    stopPolling();
   };
 
   const handleBackToMenu = () => {
     setCurrentView('main-menu');
     setMessage('');
     setApplications([]);
+    setCurrentNik('');
+    stopPolling();
   };
 
   const handleSearch = async (nik) => {
@@ -27,13 +71,14 @@ const UserDashboard = () => {
       setIsLoading(true);
       setMessage('');
       setApplications([]);
+      setCurrentNik(nik);
 
       const result = await apiService.checkLetterStatus(nik);
       
       if (result.error) {
         setMessage({ type: 'error', text: result.error });
+        stopPolling();
       } else {
-        // Backend mengembalikan object, kita perlu array
         const applicationsArray = Array.isArray(result) ? result : [result];
         
         if (applicationsArray.length === 0) {
@@ -41,12 +86,16 @@ const UserDashboard = () => {
             type: 'error', 
             text: 'Data permohonan tidak ditemukan, pastikan NIK Anda benar.' 
           });
+          stopPolling();
         } else {
           setMessage({ 
             type: 'success', 
-            text: `Ditemukan ${applicationsArray.length} permohonan surat!` 
+            text: `Ditemukan ${applicationsArray.length} permohonan surat! Data akan diperbarui otomatis.` 
           });
           setApplications(applicationsArray);
+          
+          // START real-time polling setelah search berhasil
+          startPolling(nik);
         }
       }
     } catch (error) {
@@ -54,6 +103,7 @@ const UserDashboard = () => {
         type: 'error', 
         text: `Gagal berkomunikasi dengan server. Coba lagi: ${error.message}` 
       });
+      stopPolling();
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +123,11 @@ const UserDashboard = () => {
       {message && (
         <div id="status-message" className={message.type}>
           {message.text}
+          {applications.length > 0 && (
+            <div style={{ fontSize: '0.8em', marginTop: '5px', opacity: 0.8 }}>
+              🔄 Data diperbarui otomatis setiap 10 detik
+            </div>
+          )}
         </div>
       )}
 

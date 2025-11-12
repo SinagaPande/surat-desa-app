@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// frontend/src/pages/Admin/AdminDashboard.jsx
+import React, { useState, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
 import ApplicationCard from './ApplicationCard';
 import EditModal from './EditModal';
@@ -9,9 +10,39 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState('');
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const pollingRef = useRef(null);
 
+  // NEW: Real-time polling untuk admin
+  const startPolling = () => {
+    // Stop existing polling
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+    }
+
+    // Start new polling setiap 5 detik (lebih cepat untuk admin)
+    pollingRef.current = setInterval(async () => {
+      try {
+        const data = await apiService.getAllData();
+        setApplications(data);
+      } catch (error) {
+        console.log('Admin polling error:', error.message);
+        // Silent error untuk polling
+      }
+    }, 5000); // 5 detik
+  };
+
+  const stopPolling = () => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+  };
+
+  // Cleanup polling
   useEffect(() => {
-    loadApplications();
+    return () => {
+      stopPolling();
+    };
   }, []);
 
   const loadApplications = async () => {
@@ -20,12 +51,19 @@ const AdminDashboard = () => {
       setMessage('');
       const data = await apiService.getAllData();
       setApplications(data);
+      
+      // START polling setelah load pertama
+      startPolling();
     } catch (error) {
       setMessage(`Error: Gagal memuat data. Periksa koneksi server. Detail: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadApplications();
+  }, []);
 
   const handleEditApplication = (application) => {
     setSelectedApplication(application);
@@ -34,7 +72,7 @@ const AdminDashboard = () => {
 
   const handleUpdateApplication = async (rowNumber, formData) => {
     await apiService.updateApplication(rowNumber, formData);
-    // Reload data setelah update
+    // Manual reload setelah update untuk immediate feedback
     await loadApplications();
   };
 
@@ -53,7 +91,9 @@ const AdminDashboard = () => {
           />
         </div>
         <h1>Dashboard Administrasi Surat</h1>
-        <p>Kelola dan perbarui status permohonan surat masuk.</p>
+        <p>Kelola dan perbarui status permohonan surat masuk. 
+          <span style={{fontSize: '0.9em', opacity: 0.8}}> 🔄 Data real-time</span>
+        </p>
       </div>
 
       {message && (
