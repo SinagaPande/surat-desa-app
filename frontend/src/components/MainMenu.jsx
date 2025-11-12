@@ -47,16 +47,6 @@ const MainMenu = ({ onCheckStatus }) => {
           Cek Status Permohonan
         </button>
       </div>
-
-      {/* Link admin dengan class khusus */}
-      <div className="admin-link-container">
-        <small>
-          Akses Administrator? {' '}
-          <a href="/admin">
-            Login ke Dashboard Admin
-          </a>
-        </small>
-      </div>
     </div>
   );
 };

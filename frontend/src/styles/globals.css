@@ -791,31 +791,6 @@ body {
   font-weight: 700;
 }
 
-/* Link admin styling */
-.admin-link-container {
-  margin-top: 25px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: var(--border-radius-base);
-  border: 1px solid #e9ecef;
-  text-align: center;
-  width: 100%;
-}
-
-.admin-link-container small {
-  color: #6c757d;
-}
-
-.admin-link-container a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.admin-link-container a:hover {
-  text-decoration: underline;
-}
-
 /* Responsive Design untuk User */
 @media (min-width: 768px) {
   .user-container {
@@ -903,4 +878,24 @@ body {
   .address {
     font-size: 0.9rem;
   }
+}
+
+/* === FIX LOGO CENTERING === */
+#main-menu .header-logo-image {
+  margin: 0 auto 25px auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+#main-menu .header-logo-image img {
+  max-width: 140px !important;
+  height: auto !important;
+  border-radius: 12px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
